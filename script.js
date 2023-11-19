@@ -1,15 +1,30 @@
 const gameBoard = (function() {
-    const board = [['', '', ''], ['', '', ''], ['', '', '']];
+    let board = [['', '', ''], ['', '', ''], ['', '', '']];
     const boardGrids = Array.from(document.querySelectorAll('.board-child'));
+    let cellCounter = 0;
+
+    function resetBoard() {
+        board = [['', '', ''], ['', '', ''], ['', '', '']];
+        cellCounter = 0;
+        gameBoard.boardGrids.forEach(cell => {
+            cell.innerText = '';
+            cell.classList.remove('disabled');
+        });
+    }
 
     function addToBoard(row, column, symbol) {
         if (board[row][column] === '') {
             board[row][column] = symbol;
             const boardGridItem = document.querySelector(`#r${row}-c${column}`);
             boardGridItem.innerText = symbol;
+            cellCounter++;
             // return validation if successful
             return true;
         }
+    }
+
+    function checkTie() {
+        return cellCounter === 9;
     }
 
     function checkWin(row, column, symbol) {
@@ -53,7 +68,9 @@ const gameBoard = (function() {
     
     return {
         checkWin,
+        checkTie,
         addToBoard,
+        resetBoard,
         boardGrids,
     };
 })();
@@ -69,6 +86,7 @@ const player = function(symbol) {
                 listeners.push({element, listener});
             }
         });
+        sectionHeader.innerText = `${symbol}'s Turn`
     }
 
     function _removeListeners() {
@@ -89,7 +107,10 @@ const player = function(symbol) {
             _removeListeners();
 
             if (gameBoard.checkWin(cellRow, cellColumn, symbol)) {
-                console.log("X wins");
+                sectionHeader.innerText = `${symbol} WINS`;
+                resetButton.style.visibility = 'visible';
+            } else if (gameBoard.checkTie()) {
+                sectionHeader.innerText = `DRAW`;
             } else {
                 gameInstance.nextTurn();
             }
@@ -102,27 +123,39 @@ const player = function(symbol) {
 }
 
 const bot = function(symbol) {
+    let row;
+    let column;
 
     function playTurn(gameInstance) {
-        let cellPicked = false;
-        while (!cellPicked) {
-            let row = Math.floor(Math.random()*3);
-            let column = Math.floor(Math.random()*3);
+        sectionHeader.innerText = `${symbol}'s Turn`;
+        setTimeout(() => {
+            let cellPicked = false;
+            while (!cellPicked) {
+                row = Math.floor(Math.random()*3);
+                column = Math.floor(Math.random()*3);
 
-            if (gameBoard.addToBoard(row, column, symbol)) {
-                cellPicked = `r${row}-c${column}`;
-                console.log(`bot picked: (${cellPicked})`);
+                if (gameBoard.addToBoard(row, column, symbol)) {
+                    cellPicked = `r${row}-c${column}`;
+                    console.log(`bot picked: (${cellPicked})`);
 
-                const boardGrid = document.querySelector(`#${cellPicked}`);
-                boardGrid.classList.add('disabled');
+                    const boardGrid = document.querySelector(`#${cellPicked}`);
+                    boardGrid.classList.add('disabled');
+                }
             }
-        }
 
-        gameInstance.nextTurn();
+            if (gameBoard.checkWin(row, column, symbol)) {
+                sectionHeader.innerText = `${symbol} WINS`;
+                resetButton.style.visibility = 'visible';
+            } else if (gameBoard.checkTie()) {
+                sectionHeader.innerText = `DRAW`;
+            } else {
+                gameInstance.nextTurn();
+            }
+        }, 1000)
     }
 
     return {
-        playTurn,
+        playTurn
     }
 }
 
@@ -130,16 +163,35 @@ const game = (function() {
     let players;
     let turnCount;
     let currentPlayer;
+    let gameType = 'bot';
 
-    function startNewGame() {
-        const player1 = player('X');
-        const player2 = bot('O');
-        this.players = [player1, player2];
+    function startNewGame(gameType) {
 
+        gameBoard.resetBoard();
+        const boardElement = document.querySelector('.board');
+        boardElement.style.visibility = 'visible';
+        sectionHeader.innerText = 'X'
+
+        this.players = [..._setGameMode(gameType)]
         this.turnCount = 0;
         this.currentPlayer = 0;
 
         this.players[this.currentPlayer].playTurn(this);
+    }
+
+    function _setGameMode(gameType) {
+        let player1;
+        let player2; 
+
+        if (gameType === 'player') {
+            player1 = player('X');
+            player2 = player('O');
+        } else {
+            player1 = player('X');
+            player2 = bot('O');
+        }
+        
+        return [player1, player2];
     }
 
     function nextTurn() {
@@ -149,10 +201,33 @@ const game = (function() {
     }
 
     return {
-        players,
-        turnCount,
-        currentPlayer,
+        gameType,
         startNewGame,
         nextTurn
     }
 })();
+
+const sectionHeader = document.querySelector('.header');
+const resetButton = document.querySelector('.reset');
+resetButton.addEventListener('click', () => {
+    game.startNewGame(game.gameType);
+    resetButton.style.visibility = 'hidden';
+});
+
+const twoPlayer = document.querySelector('.player-game');
+const botGame = document.querySelector('.bot-game');
+twoPlayer.addEventListener('click', () => {
+    game.gameType = 'player';
+    game.startNewGame(game.gameType);
+    displayButtons();
+});
+botGame.addEventListener('click', () => {
+    game.gameType = 'bot';
+    game.startNewGame(game.gameType);
+    displayButtons();
+});
+
+function displayButtons() {
+    twoPlayer.style.visibility = 'hidden';
+    botGame.style.visibility = 'hidden';
+}

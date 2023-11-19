@@ -56,29 +56,59 @@ body {
     flex-direction: column;
     justify-content: center;
     color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
 }
 
 .section {
-    border-style: solid;
-    border-width: 1px;
-    border-color: green;
     display: flex;
     justify-content: center;
+    align-items: center;
     padding: 2.5rem;
+}
+
+.header {
+    font-size: 3rem;
+}
+
+.board-container .button-container {
+    position: absolute;
+}
+
+button {
+    width: 6rem;
+    height: 3rem;
+    margin: 0.5rem;
+    border-style: solid;
+    border-radius: 1rem;
+    border-color: white;
+    font-weight: bolder;
+    color: white;
+    background-color: rgb(4, 20, 34);
 }
 
 .board {
     display: grid;
     grid-template-columns: repeat(3, 10rem);
     grid-template-rows: repeat(3, 10rem);
+    visibility: hidden;
 }
 
 .board-child {
     border-color: white;
     border-style: solid;
     border-width: 1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
 }
 
-.board-child:hover {
+.board-child:hover,
+button:hover {
     scale: 101%;
+}
+
+.reset {
+    visibility: hidden;
 }
