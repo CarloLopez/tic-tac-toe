@@ -111,6 +111,7 @@ const player = function(symbol) {
                 resetButton.style.visibility = 'visible';
             } else if (gameBoard.checkTie()) {
                 sectionHeader.innerText = `DRAW`;
+                resetButton.style.visibility = 'visible';
             } else {
                 gameInstance.nextTurn();
             }
@@ -148,6 +149,7 @@ const bot = function(symbol) {
                 resetButton.style.visibility = 'visible';
             } else if (gameBoard.checkTie()) {
                 sectionHeader.innerText = `DRAW`;
+                resetButton.style.visibility = 'visible';
             } else {
                 gameInstance.nextTurn();
             }
