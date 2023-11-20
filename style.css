@@ -73,6 +73,15 @@ body {
 
 .board-container .button-container {
     position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.start-button-header {
+    font-size: 1.75rem;
 }
 
 button {
@@ -107,6 +116,8 @@ button {
 .board-child:hover,
 button:hover {
     scale: 101%;
+    background-color: whitesmoke;
+    color: black;
 }
 
 .reset {
