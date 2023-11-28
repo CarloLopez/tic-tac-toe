@@ -8,7 +8,7 @@ A classic Tic-Tac-Toe game implemented in JavaScript, HTML, and CSS. This projec
 - **Interactive UI:** Click on the grid to make a move.
 - **Game Status Notifications:** Displays which player's turn it is, announces the winner, or declares a draw.
 
-### Usage
+## Usage
 
 - Requires a modern web browser that supports HTML5, CSS3, and JavaScript. **[Link Here.](https://carlolopez.github.io/tic-tac-toe/)**
 
