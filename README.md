@@ -10,6 +10,6 @@ A classic Tic-Tac-Toe game implemented in JavaScript, HTML, and CSS. This projec
 
 ## Usage
 
-- Requires a modern web browser that supports HTML5, CSS3, and JavaScript. **[Link Here.](https://carlolopez.github.io/tic-tac-toe/)**
+Click **[Here.](https://carlolopez.github.io/tic-tac-toe/)** to access page.
 
 ![image](https://github.com/CarloLopez/tic-tac-toe/assets/86852232/ae33e70a-77a3-4bd0-b743-9de95d695222)
